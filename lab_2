@@ -1,0 +1,28 @@
+### 4###
+n <- 5e3
+samples <- numeric(length = n)
+for (i in 1 : n){
+  z1 <- rnorm(n)
+  z2 <- rnorm(n)
+  z3 <- rnorm(n)
+  w <- z1^2 + z2^2 + z3^2
+  samples[i] = w
+}
+head(samples)
+hist(samples, breaks = 40)
+
+## calculating mean and vaeriance of w ##
+mean(samples)
+var(samples)
+
+#### calculating theoretical mean and variance ###
+theo_mean <- 3
+theo_var <- 2*3
+
+
+#### 5 #####
+X <- matrix(rnorm(40) , nrow = 8, ncol = 5)
+px <- X %*% solve(t(X) %*% X) %*% t(X)
+
+px_squared <- px %*% px
+print(identical(px, px_square)) ## for checking whether px is idempotent or not
