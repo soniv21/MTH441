@@ -1,4 +1,4 @@
-### 4###
+### 4 ###
 n <- 5e3
 samples <- numeric(length = n)
 for (i in 1 : n){
@@ -26,3 +26,24 @@ px <- X %*% solve(t(X) %*% X) %*% t(X)
 
 px_squared <- px %*% px
 print(identical(px, px_square)) ## for checking whether px is idempotent or not
+
+#### 1 ####
+
+y  <- c(2158.70, 1678.15, 2316.00, 2061.30, 2207.50, 1708.30, 1784.70, 2575.00, 
+                           2357.90, 2256.70, 2165.20, 2399.55, 1779.80, 2336.75, 1765.30, 2053.50, 
+                           2414.40, 2200.50, 2654.20, 1753.70)
+x <- c(15.50, 23.75, 8.00, 17.00, 5.50, 19.00, 24.00, 2.50, 7.50, 11.00, 
+                                13.00, 3.75, 25.00, 9.75, 22.00, 18.00, 6.00, 12.50, 2.00, 21.50)
+
+X <- cbind(1, x)
+model <- lm(y~x, data = data.frame(y,x))
+summary(model)
+
+
+### 2 ###
+install.packages("openxlsx")
+library(openxlsx)
+df <- data.frame('Shear Strength (psi)' = y, 'Age of Propellant (weeks)' = x)
+# Save to .xlsx files
+write.xlsx(df, file = "data_y.xlsx", sheetName = "Sheet1", col.names = TRUE)
+write.xlsx(df, file = "data_x.xlsx", sheetName = "Sheet1", col.names = TRUE)
