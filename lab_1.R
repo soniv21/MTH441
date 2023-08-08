@@ -1,0 +1,28 @@
+# Install and load the "xlsx" package
+install.packages("xlsx")
+install.packages("rJava")
+library("xlsx")
+library("rJava")
+
+# Read data from the Excel file
+Data <- read.xlsx("211051.xlsx", sheetIndex = 1, header = TRUE)
+#### 4 #####
+
+# Given data
+y <- c(1, 2, 3, 4, 5)
+x1 <- c(3, 5, 8, 6, 6)
+x2 <- c(12, 14, 54, 67, 80)
+
+mat1 <- cbind(x1, x2)
+X <- cbind(1, mat1)
+#### linear regression model ####
+model <- lm(y ~ x1 + x2, data = data.frame(y, x1, x2))
+summary(model)
+
+
+### 3 ###
+beta_hat <- solve(t(X) %*% X) %*% t(X) %*% y
+
+# Print the estimated coefficients
+print(beta_hat)
+
