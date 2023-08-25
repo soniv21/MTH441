@@ -1,0 +1,59 @@
+library(carData)
+y <- c (1, 4, 8, 9, 3, 8, 9)
+x1 <- c(-1, 1, -1, 1, 0, 0, 0)
+x2 <- c(-1, -1, 1, 1, 0, 1, 2)
+model <- lm(y~x1+x2+x1^2)
+summary(model)
+# Define the hypotheses matrix
+hypotheses_matrix <- matrix(c(0, 1, -1, 0), ncol = 2)
+
+# Test the hypotheses
+test_result <- linearHypothesis(model, hypotheses_matrix)
+
+# Print the test result
+print(test_result)
+
+
+### 2 ###
+res_lse <- mean(y)
+res_lse
+
+## b ##
+## calculating restricted rss
+res_rss <- sum((y - res_lse)^2)
+res_rss
+
+## calculating unrestricted rss
+model <- lm(y ~ x1+x2)
+betas <- predict(model)
+betas
+unres_rss <- sum((y - betas)^2)
+unres_rss
+
+## c ##
+### detremining f statistics
+ q <- 2
+ n <- length(y)
+ p <- 4 ### no of total betas
+num <- (res_rss - unres_rss)/q
+denom <- (unres_rss)/(n-p)
+f_statistics <- num/denom
+
+## d ##
+### calculating f-statistics using lm function
+f_stats_lm <- summary(model)$fstatistic[1]
+print(paste("F-statistics:" , f_stats_lm))
+print(paste("F-statistics:" , f_statistics))
+
+### 3 ###
+install.packages("olsrr")
+library(olsrr)
+x <- c(1.0, 1.0, 2.0, 3.3, 3.3, 4.0, 4.0, 4.0, 4.7, 5.0, 5.6, 5.6,5.6, 6.0, 6.0, 6.5, 6.9)
+y <- c(10.84, 9.30, 16.35, 22.88, 24.35, 24.56, 25.86, 29.16, 24.59, 22.25, 25.90, 27.20, 25.61, 25.45, 26.56, 21.03, 21.46)
+length(x)
+length(y)
+model <- lm(y~x)
+summary(model)
+result <- ols_lack_fit_test(model)
+
+
