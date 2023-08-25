@@ -1,5 +1,7 @@
 #### 1 ####
 library(readxl)
+library(mvtnorm)
+
 rocketdata <- read_xlsx("RocketData.xlsx")
 head(rocketdata)
 X <- cbind(1, x)
@@ -62,4 +64,27 @@ print(identical(px, px_squared)) ## for checking whether px is idempotent or not
 mu <- matrix(0, nrow = 8, ncol = 1)
 I <- diag(x = 1, nrow = 8, ncol = 8)
 Yy <- rnorm(5e3, mean = mu)
-u <- t(Y) %*% px %*% Y
+u <- t(Yy) %*% px %*% Y
+
+### 6 ###
+n <- 5000
+px1 <- X %*% solve(t(X) %*% X) %*% t(X)
+dim(px1)
+I8 <- diag(x =1, 8,8)
+px2 <- I8 - px1
+mu <- matrix(0, nrow = 8, ncol = 1)
+y <- dmvnorm(n, mean = mu, sigma = I8)
+dim(y)
+
+# Calculating the degrees of freedom (df) for ANOVA
+df1 <- sum(rank(px2))  # Sum of ranks of px2
+df2 <- sum(rank(px1))  # Sum of ranks of px1
+
+# Calculating the numerator and denominator for the F-statistic
+num <- (t(y) %*% px2 %*% y) / df1
+denom <- (t(y) %*% px1 %*% y) / df2
+
+# Calculating the F-statistic
+f <- num / denom
+
+
