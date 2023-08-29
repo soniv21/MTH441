@@ -19,3 +19,13 @@ model <- lm(dat$Y~dat$X1+dat$X2)
 summary(model) 
 MSres <- sum((model$residuals)^2)/model$rank
 di <- model$residuals/sqrt(MSres)
+
+
+### b ### 
+X <- cbind(1, dat$X1, dat$X2)
+H <- diag(X%*% solve(t(X) %*%X)%*%t(X))
+r_student <- model$residuals/sqrt((MSres * (1-H) ))
+
+### c ###
+
+
