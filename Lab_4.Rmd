@@ -1,0 +1,58 @@
+---
+title: "Lab_4"
+author: "Soni Verma"
+date: "2023-08-29"
+output: html_document
+---
+
+Data
+```{r, warning=FALSE}
+rocket <- read.csv("RocketData.csv")
+dat <- read.csv("TimeDeliveryData.csv")
+```
+## Question 1
+
+```{r,warning=FALSE}
+### a part
+model <- lm(dat$Y~dat$X1+dat$X2)
+summary(model) 
+MSres <- sum((model$residuals)^2)/model$rank
+di <- model$residuals/sqrt(MSres)
+
+
+### b ### 
+X <- cbind(1, dat$X1, dat$X2)
+H <- diag(X%*% solve(t(X) %*%X)%*%t(X))
+r_student <- model$residuals/sqrt((MSres * (1-H) ))
+
+### c ###
+p_residuals <- (model$residuals/(1-H))^2
+as.numeric(p_residuals)
+
+##  d ##
+R_student <- rstudent(model)
+```
+
+## Question 2
+```{r, warning=FALSE}
+
+## a ##
+fitted_values<- model$fitted.values
+plot(fitted_values, R_student, pch = 16)
+
+## b ##
+residuals <- model$residuals
+qqnorm(residuals, pch = 16)
+qqline(residuals, col = 2)
+
+### c ###
+y_x2 <- lm(dat$Y~dat$X1)
+e_yx1<- numeric(length = 25)
+e_yx1 <- y_x2$residuals
+x1x2 <- lm(dat$X1~dat$X2)
+e_x1x2 <- x1x2$residuals
+plot(e_x1x2,e_yx1,pch=16,main="Partial Regression Plot")
+
+
+```
+
