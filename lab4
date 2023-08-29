@@ -27,5 +27,28 @@ H <- diag(X%*% solve(t(X) %*%X)%*%t(X))
 r_student <- model$residuals/sqrt((MSres * (1-H) ))
 
 ### c ###
+p_residuals <- (model$residuals/(1-H))^2
+as.numeric(p_residuals)
+
+##  d ##
+R_student <- ((model$rank)*MSres - ((model$residuals)/(1-H)))/(model$rank-1)
+
+
+
+### 2 ####
+
+## a ##
+fitted_val<- predict(model)
+plot(R_student, fitted_val)
+
+## b ##
+residuals <- model$residuals
+qqnorm(residuals)
+qqline(residuals, col = 2)
+
+### c ###
+var <- model.matrix(model)
+
+
 
 
