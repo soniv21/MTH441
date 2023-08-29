@@ -1,0 +1,21 @@
+rocket <- RocketData
+head(dat)
+head(rocket)
+est <- lm(rocket$Y~rocket$X)
+summary(est)
+alpha <- 0.05  ### taking alpha
+estimates <- coef(est)  ### coefficient of estimates
+bon_coef <- length(estimates)  ### length of determined coefficient
+bon_alpha <- alpha/bon_coef
+confint(est)
+intervals <- confint(est)*sqrt(1+1/bon_coef)
+
+
+### lab4 ###
+##a##
+dat <- TimeDeliveryData
+head(dat)
+model <- lm(dat$Y~dat$X1+dat$X2)
+summary(model) 
+MSres <- sum((model$residuals)^2)/model$rank
+di <- model$residuals/sqrt(MSres)
