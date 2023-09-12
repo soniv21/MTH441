@@ -1,0 +1,39 @@
+library(readxl)
+time_dat <- read_xlsx("TimeDeliveryData.xlsx")
+head(time_dat)
+
+model <- lm(time_dat$Y ~ time_dat$X1+ time_dat$X2)
+summary(model)
+
+####q1
+
+## calculating leverage points
+lev_val <- hatvalues(model)
+threshold <- 2 * (length(coefficients(model)) + 1) / length(residuals(model))
+high_leverage_points <- which(lev_val > threshold)
+high_leverage_points
+
+## calculating cooks distance
+cooks_dis <- cooks.distance(model)
+threshold <- 4 / (length(residuals(model)) - length(coefficients(model)))
+outliers <- which(cooks_dis > threshold)
+outliers
+
+## dfbetas
+n <- 25
+dfbetas_val <- dfbetas(model)
+threshold <- 2/sqrt(n)
+outliers <- which(abs(dfbetas_val) > threshold)
+outliers 
+
+## dffits
+p <- ncol(model.matrix(model)) -1
+dffit <- dffits(model)
+threshold <- 2*sqrt(2/n)
+outliers <- which(abs(dffit) > threshold)
+outliers
+
+## covratio
+covratios_val <- covratio(model)
+outliers <- which(covratios_val > (1+ (3*p/n)) |  covratios_val < (1 - (3*p/n)))
+outliers  
