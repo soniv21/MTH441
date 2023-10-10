@@ -1,0 +1,39 @@
+# Fit full model
+full_model <- lm(Y ~ X1 + X2 + X3 + X4, data = hald_data)
+
+# Subset model based on R2
+subset_model_r2 <- step(full_model, direction = "both", trace = 0)
+# Function to calculate R2adj
+r2adj <- function(model) {
+  n <- length(model$residuals)
+  p <- length(coefficients(model))
+  1 - (1 - summary(model)$adj.r.squared) * ((n - 1) / (n - p - 1))
+}
+
+# Fit full model
+full_model <- lm(Y ~ X1 + X2 + X3 + X4, data = hald_data)
+
+# Subset model based on R2adj
+subset_model_r2adj <- step(full_model, direction = "both", trace = 0, 
+                           steps = 1000, k = 2, test = "F")
+
+
+# Fit full model
+full_model <- lm(Y ~ X1 + X2 + X3 + X4, data = hald_data)
+
+# Subset model based on Mallow's Cp
+subset_model_cp <- step(full_model, direction = "both", trace = 0, 
+                        steps = 1000, k = log(length(hald_data$Y)))
+
+
+# Forward selection based on AIC
+forward_model <- step(lm(Y ~ 1, data = hald_data), 
+                      scope = formula(full_model), 
+                      direction = "forward", trace = 0)
+
+
+# Backward elimination based on AIC
+backward_model <- step(full_model, direction = "backward", trace = 0)
+
+# Stepwise selection based on AIC
+stepwise_model <- step(full_model, direction = "both", trace = 0)
