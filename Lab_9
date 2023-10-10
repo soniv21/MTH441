@@ -37,3 +37,60 @@ backward_model <- step(full_model, direction = "backward", trace = 0)
 
 # Stepwise selection based on AIC
 stepwise_model <- step(full_model, direction = "both", trace = 0)
+
+
+####2####
+# Define a function to calculate PRESS
+calculate_PRESS <- function(model) {
+  residuals <- residuals(model)
+  hat_matrix <- hatvalues(model)
+  sum((residuals / (1 - hat_matrix))^2)
+}
+
+# Calculate PRESS for each model
+PRESS_r2 <- calculate_PRESS(subset_model_r2)
+PRESS_r2adj <- calculate_PRESS(subset_model_r2adj)
+PRESS_cp <- calculate_PRESS(subset_model_cp)
+PRESS_forward <- calculate_PRESS(forward_model)
+PRESS_backward <- calculate_PRESS(backward_model)
+PRESS_stepwise <- calculate_PRESS(stepwise_model)
+
+# Display the PRESS values
+cat("PRESS (R2):", PRESS_r2, "\n")
+cat("PRESS (R2adj):", PRESS_r2adj, "\n")
+cat("PRESS (Cp):", PRESS_cp, "\n")
+cat("PRESS (Forward):", PRESS_forward, "\n")
+cat("PRESS (Backward):", PRESS_backward, "\n")
+cat("PRESS (Stepwise):", PRESS_stepwise, "\n")
+
+
+# Calculate AIC and BIC for each model
+AIC_r2 <- AIC(subset_model_r2)
+AIC_r2adj <- AIC(subset_model_r2adj)
+AIC_cp <- AIC(subset_model_cp)
+AIC_forward <- AIC(forward_model)
+AIC_backward <- AIC(backward_model)
+AIC_stepwise <- AIC(stepwise_model)
+
+BIC_r2 <- BIC(subset_model_r2)
+BIC_r2adj <- BIC(subset_model_r2adj)
+BIC_cp <- BIC(subset_model_cp)
+BIC_forward <- BIC(forward_model)
+BIC_backward <- BIC(backward_model)
+BIC_stepwise <- BIC(stepwise_model)
+
+# Display AIC and BIC values
+cat("AIC (R2):", AIC_r2, "\n")
+cat("AIC (R2adj):", AIC_r2adj, "\n")
+cat("AIC (Cp):", AIC_cp, "\n")
+cat("AIC (Forward):", AIC_forward, "\n")
+cat("AIC (Backward):", AIC_backward, "\n")
+cat("AIC (Stepwise):", AIC_stepwise, "\n")
+
+cat("BIC (R2):", BIC_r2, "\n")
+cat("BIC (R2adj):", BIC_r2adj, "\n")
+cat("BIC (Cp):", BIC_cp, "\n")
+cat("BIC (Forward):", BIC_forward, "\n")
+cat("BIC (Backward):", BIC_backward, "\n")
+cat("BIC (Stepwise):", BIC_stepwise, "\n")
+
